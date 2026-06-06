@@ -113,14 +113,7 @@ Max 5 requests per minute per IP
 Implemented using express-rate-limit
 📸 UI Preview
 
-(Add screenshot here)
 
-🚀 Future Improvements
-🔑 User authentication (JWT)
-💾 Save code review history
-⚡ Streaming AI responses (ChatGPT-like typing)
-📊 Code scoring system (0–10)
-☁️ Deployment (Vercel + Render)
 👨‍💻 Author
 
 Shahmeer Rana
