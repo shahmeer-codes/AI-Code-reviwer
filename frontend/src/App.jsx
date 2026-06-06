@@ -1,17 +1,33 @@
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+import "prismjs/components/prism-javascript";
+
+import { useEffect, useState } from "react";
+
 const App = () => {
+  const [count, setcount] = useState(0);
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [count]);
+
   return (
     <div className="h-screen w-screen bg-slate-100">
       <div className="flex h-full">
         <div className="relative w-1/2 border-r border-slate-200 bg-slate-950 p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">
-              Code Editor
-            </h2>
+            <h2 className="text-lg font-semibold text-white">Code Editor</h2>
           </div>
 
           <div className="h-[calc(100%-80px)] rounded-xl border border-slate-800 bg-slate-900 p-4">
             <pre className="text-sm text-slate-300">
-              Start writing your code here...
+              <code className="language-javascript">
+                {`function greet(name) {
+  const message = \`Hello, ${name}!\`;
+  return message;
+}
+
+console.log(greet("Shahmeer"));`}
+              </code>
             </pre>
           </div>
 
