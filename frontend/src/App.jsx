@@ -1,60 +1,60 @@
-import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-javascript";
+import { useState } from "react";
+import CodeEditor from "@uiw/react-textarea-code-editor";
+import axios from "axios";
+const App = () => { 
+    const [ai_review, setai_review] = useState(null)
+    const [code, setCode] = useState(`function greet(name) {
+    const message = \`Hello, \${name}!\`;
+    return message;
+  }`);
 
-import { useEffect, useState } from "react";
-
-const App = () => {
-  const [count, setcount] = useState(0);
-  useEffect(() => {
-    Prism.highlightAll();
-  }, [count]);
-
+  const getReview = async () => {
+    try {
+      const response =await axios.post("http://localhost:3000/ai/send-code",{code})
+      setai_review(response.data);
+    } catch (error) {
+      console.error("Error fetching review:", error);
+    }
+  }
   return (
     <div className="h-screen w-screen bg-slate-100">
       <div className="flex h-full">
-        <div className="relative w-1/2 border-r border-slate-200 bg-slate-950 p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">Code Editor</h2>
+        {/* Editor */}
+        <div className="relative flex w-1/2 flex-col border-r border-slate-200 bg-slate-950 p-6">
+          <h2 className="mb-4 text-lg font-semibold text-white">Code Editor</h2>
+
+          <div className="flex-1 overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+            <CodeEditor
+              value={code}
+              language="js"
+              placeholder="Please enter JS code."
+              onChange={(evn) => setCode(evn.target.value)}
+              padding={16}
+              style={{
+                fontSize: 14,
+                backgroundColor: "transparent",
+                fontFamily: "monospace",
+                height: "100%",
+              }}
+            />
           </div>
 
-          <div className="h-[calc(100%-80px)] rounded-xl border border-slate-800 bg-slate-900 p-4">
-            <pre className="text-sm text-slate-300">
-              <code className="language-javascript">
-                {`function greet(name) {
-  const message = \`Hello, ${name}!\`;
-  return message;
-}
-
-console.log(greet("Shahmeer"));`}
-              </code>
-            </pre>
-          </div>
-
-          <div className="absolute bottom-6 right-6">
-            <button className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white shadow-md transition-all duration-200 hover:bg-blue-700 hover:shadow-lg">
+          <div className="mt-4 flex justify-end">
+            <button onClick={getReview} className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700">
               Review Code
             </button>
           </div>
         </div>
 
-        <div className="w-1/2 bg-white p-6">
-          <div className="mb-4 border-b border-slate-200 pb-4">
-            <h2 className="text-lg font-semibold text-slate-800">
-              AI Code Review
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              Review results and suggestions will appear here.
-            </p>
-          </div>
+        {/* Review Panel */}
+        <div className="flex w-1/2 flex-col bg-white p-6">
+          <h2 className="mb-2 text-lg font-semibold text-slate-800">
+            AI Code Review
+          </h2>
 
-          <div className="flex h-[calc(100%-80px)] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50">
-            <p className="text-center text-slate-400">
-              No review generated yet.
-              <br />
-              Submit your code to receive feedback.
-            </p>
-          </div>
+          <p className="text-sm text-slate-500">
+            Review results will appear here.
+          </p>
         </div>
       </div>
     </div>
